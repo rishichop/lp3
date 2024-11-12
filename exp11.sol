@@ -1,6 +1,8 @@
 //SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.0;
 
+
+
 contract StudentData{
     struct Student{
         string name;
@@ -8,6 +10,8 @@ contract StudentData{
     }
 
     Student[] public studentArr;
+
+    event Log(string message, uint256 gasleft);
 
     function addStudent(string memory name,uint rollno) public{
         for(uint i=0;i<studentArr.length;i++){
@@ -33,9 +37,11 @@ contract StudentData{
 
     fallback() external payable {
         // This function will handle external function call that is not there in our contract
+        emit Log("fallback", gasleft());
      }
 
      receive() external payable { 
         // This function will handle the ether sent by external user but without data mentioned
+        emit Log("receive", gasleft());
      }
 }
