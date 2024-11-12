@@ -30,5 +30,5 @@ jupyter notebook
 
 ## Step 5: Open and Run Your File
 - Locate the file in the Jupyter interface.
-- Click on the file to open it.
-Use the "Run" button (or press Shift + Enter) to execute cells within the notebook.
+- Click on the file to open it. 
+- Use the "Run" button (or press Shift + Enter) to execute cells within the notebook.
