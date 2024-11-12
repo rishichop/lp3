@@ -1,50 +1,27 @@
-pragma solidity ^0.6.6;
+//SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.0;
 
-contract BankContract {
- 
-    struct client_account{
-        int client_id;
-        address client_address;
-        uint client_balance_in_ether;
+contract Bank{
+    address private accOwner;
+    uint256 balance=0;
+    constructor(){
+        accOwner=msg.sender;
     }
 
-    client_account[] clients;
-
-    int clientCounter;
-    address payable manager;
-
-    modifier onlyClients() {
-        bool isclient = false;
-        for(uint i=0;i<clients.length;i++){
-            if(clients[i].client_address == msg.sender){
-                isclient = true;
-                break;
-            }
-        }
-        require(isclient, "Only clients can call this!");
-        _;
+    function Deposit() public payable{
+        require(accOwner==msg.sender,"You are not an account owner!!");
+        require(msg.value > 0, "Amount should be greater than 0.");
+        balance+=msg.value;
     }
 
-    constructor() public{
-        clientCounter = 0;
+    function Withdraw() public payable {
+        require(accOwner==msg.sender,"You are not an account owner");
+        require(msg.value > balance,"Account doesnot have sufficient balance!");
+        balance-=msg.value;
     }
 
-   receive() external payable { }
-
-    function joinAsClient() public payable returns(string memory){      
-        clients.push(client_account(clientCounter++, msg.sender, address(msg.sender).balance));
-        return "";
-    }
-
-    function deposit() public payable onlyClients{
-        payable(address(this)).transfer(msg.value);
-    }
-
-    function withdraw(uint amount) public payable onlyClients{
-        msg.sender.transfer(amount * 1 ether);
-    }
-
-    function getContractBalance() public view returns(uint){
-        return address(this).balance;
-    }
+    function showBalance() public view returns(uint256){
+        require(accOwner==msg.sender,"You are not an account owner");
+        return balance;
+    }
 }
